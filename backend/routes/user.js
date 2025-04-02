@@ -1,5 +1,5 @@
 import express from "express";
-import { UserModel } from "../DB.js";
+import { UserModel, Account } from "../DB.js";
 import bcrypt from "bcrypt";
 import {authMiddleware} from "../middleware.js";
 import jwt from "jsonwebtoken";
@@ -43,6 +43,12 @@ userRouter.post("/signup", async (req, res) => {
             lastName
          });
             console.log(user);
+            const userId = user._id;
+
+            await Account.create({
+                userId,
+                balance: 1 + Math.random() * 10000
+            })
             
             if(!user){
                 return res.status(400).json({ message: "Failed to create user" });
