@@ -39,7 +39,7 @@ export function UserProfile() {
     };
 
     fetchUserData();
-  }, []);
+  }, [navigate]);
 
   if (loading) return (
     <div className="flex justify-center items-center h-screen">
