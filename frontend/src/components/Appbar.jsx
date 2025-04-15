@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 export const Appbar = () => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
     return <div className="shadow h-14 flex justify-between">
         <div className="flex flex-col justify-center h-full ml-4">
             PayTM App
@@ -9,10 +11,22 @@ export const Appbar = () => {
             <div className="flex flex-col justify-center h-full mr-4">
                 Hello
             </div>
-            <div className="rounded-full h-12 w-12 bg-slate-200 flex justify-center mt-1 mr-2">
-                <div className="flex flex-col justify-center h-full text-xl">
-                    U
+            <div className="relative">
+                <div 
+                    className="rounded-full h-12 w-12 bg-slate-200 flex justify-center mt-1 mr-2 cursor-pointer"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
+                    <div className="flex flex-col justify-center h-full text-xl">
+                        U
+                    </div>
                 </div>
+                {isDropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a>
+                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</a>
+                    </div>
+                )}
             </div>
         </div>
     </div>

@@ -3,22 +3,31 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./Button";
+import { jwtDecode } from "jwt-decode";
 
 export const Users = () => {
-
     const [users, setUsers] = useState([]);
     const [filter, setFilter] = useState("");
+    const [currentUserId, setCurrentUserId] = useState("");
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            const decoded = jwtDecode(token);  // Note the camelCase now
+            setCurrentUserId(decoded.userId);
+        }
+
         axios.get("http://localhost:3000/api/v1/user/bulk?filter=" + filter, {
             headers: {
-                Authorization: "Bearer " + localStorage.getItem("token")
+                Authorization: "Bearer " + token
             }
         })
             .then(response => {
                 setUsers(response.data.user)
             })
     }, [filter])
+
+    const filteredUsers = users.filter(user => user._id !== currentUserId);
 
     return <>
         <div className="font-bold mt-6 text-lg">
@@ -30,7 +39,7 @@ export const Users = () => {
             }} type="text" placeholder="Search users..." className="w-full px-2 py-1 border rounded border-slate-200"></input>
         </div>
         <div>
-            {users.map(user => <User key={user._id} user={user} />)}
+            {filteredUsers.map(user => <User key={user._id} user={user} />)}
         </div>
     </>
 }
