@@ -18,7 +18,7 @@ export const Signup = () => {
         const response = await axios.post("https://paytm-tsu6.onrender.com/api/v1/user/signup", { username, password, firstName, lastName })
         console.log(response)
         alert("Signup Sucessfull")
-        navigate("/signin")
+        navigate("/")
 
     }
     return <div className="bg-slate-300 h-screen flex justify-center">
@@ -29,11 +29,11 @@ export const Signup = () => {
         <InputBox placeholder="Enter your first name" label={"First Name"} onChange={(e) => setFirstName(e.target.value)} />
         <InputBox placeholder="Enter your last name" label={"Last Name"} onChange={(e) => setLastName(e.target.value)} />
         <InputBox placeholder="Enter your username" label={"Username"} onChange={(e) => setUsername(e.target.value)} />
-        <InputBox placeholder="Enter your password" label={"Password"} onChange={(e) => setPassword(e.target.value)} />
+        <InputBox placeholder="Enter your password" type="password" label={"Password"} onChange={(e) => setPassword(e.target.value)} />
         <div className="pt-4">
           <Button label={"Sign up"} onClick={handleSignup} />
         </div>
-        <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/signin"} />
+        <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/"} />
       </div>
     </div>
   </div>

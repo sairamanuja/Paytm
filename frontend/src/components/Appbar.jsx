@@ -1,56 +1,85 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const Appbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [firstName, setFirstName] = useState("");
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const response = await axios.get("http://localhost:3000/api/v1/user/me", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                
+                setFirstName(response.data.user.firstName);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+                // Handle unauthorized (401) by redirecting to login
+                if (error.response?.status === 401) {
+                    localStorage.removeItem("token");
+                    navigate("/signup");
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, [navigate]);
+
     const handleSignOut = () => {
-        // 1. Clear the authentication token
         localStorage.removeItem("token");
-        
-        // 2. (Optional) Clear any user-related data
-        // localStorage.removeItem("user");
-        
-        // 3. Redirect to signup/login page
         navigate("/signup");
-        
-        // 4. Close the dropdown
+    };
+
+    const handleProfileClick = () => {
+        navigate("/profile");
         setIsDropdownOpen(false);
     };
 
-    return (
-        <div className="shadow h-14 flex justify-between">
-            <div className="flex flex-col justify-center h-full ml-4">
-                PayTM App
+    if (loading) {
+        return (
+            <div className="shadow h-14 flex justify-between items-center px-4">
+                <div className="text-lg font-medium">PayTM App</div>
+                <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-blue-500"></div>
             </div>
-            <div className="flex">
-                <div className="flex flex-col justify-center h-full mr-4">
-                    Hello
-                </div>
+        );
+    }
+
+    return (
+        <div className="shadow h-14 flex justify-between items-center px-4">
+            <div className="text-lg font-medium">PayTM App</div>
+            
+            <div className="flex items-center gap-2">
+                <span>Hello, {firstName || "User"}</span>
+                
                 <div className="relative">
                     <div 
-                        className="rounded-full h-12 w-12 bg-slate-200 flex justify-center mt-1 mr-2 cursor-pointer"
+                        className="rounded-full h-10 w-10 bg-slate-200 flex items-center justify-center cursor-pointer"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
-                        <div className="flex flex-col justify-center h-full text-xl">
-                            U
-                        </div>
+                        {(firstName ? firstName[0] : 'U').toUpperCase()}
                     </div>
+                    
                     {isDropdownOpen && (
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                Your Profile
-                            </a>
-                            <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                Settings
-                            </a>
                             <button 
-                                onClick={handleSignOut}
-                                className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                onClick={handleProfileClick}
+                                className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
                             >
-                                Sign out
+                                Your Profile
                             </button>
+                          
                         </div>
                     )}
                 </div>

@@ -149,4 +149,33 @@ userRouter.get("/bulk", authMiddleware, async (req, res) => {
 })
 
 
+userRouter.get("/me", authMiddleware, async (req, res) => {
+    try {
+
+        const user = await UserModel.findById(req.userId)
+           
+        
+        
+        const account = await Account.findOne({ userId: req.userId })
+            .select('balance');
+
+        if (!user || !account) {
+            return res.status(404).json({ message: "Details not found" });
+        }
+
+        res.json({
+            user: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                username: user.username
+            },
+            balance: account.balance
+        });
+    } catch (error) {
+        console.error("Error fetching details:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+
 export default userRouter;

@@ -10,8 +10,10 @@ export const authMiddleware = (req, res, next) => {
     const token = headers.split(" ")[1];
     console.log(token);
 
-    if (!token) {
-        return res.status(401).json({ message: "Unauthorized" });
+    if (token === null  || !token) {
+        return res.status(401).json({ 
+            message: "Unauthorized - Token is null" 
+        });
     }
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);

@@ -13,7 +13,7 @@ export const Users = () => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
-            const decoded = jwtDecode(token);  // Note the camelCase now
+            const decoded = jwtDecode(token);  
             setCurrentUserId(decoded.userId);
         }
 

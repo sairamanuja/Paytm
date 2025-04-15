@@ -3,11 +3,17 @@ import { Appbar } from "../components/Appbar";
 import { Balance } from "../components/Balance";
 import { Users } from "../components/Users";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"
 
 export const Dashboard = () => {
     const [balance, setBalance] = useState("Loading...");
-
+    const token = localStorage.getItem("token");
+   const navigate = useNavigate();
     useEffect(() => {
+    if(!token){
+      navigate("/signup")
+    }
+
         const fetchBalance = async () => {
             try {
                 const response = await axios.get(
