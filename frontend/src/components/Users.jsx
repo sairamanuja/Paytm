@@ -17,13 +17,14 @@ export const Users = () => {
             setCurrentUserId(decoded.userId);
         }
 
-        axios.get("http://localhost:3000/api/v1/user/bulk?filter=" + filter, {
+        axios.get("https://paytm-tsu6.onrender.com/api/v1/user/bulk?filter=" + filter, {
             headers: {
                 Authorization: "Bearer " + token
             }
         })
             .then(response => {
                 setUsers(response.data.user)
+                console.log(response.data.user)
             })
     }, [filter])
 

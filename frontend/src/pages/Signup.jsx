@@ -15,8 +15,9 @@ export const Signup = () => {
     const [lastName, setLastName] = useState("")
     const handleSignup = async () => {
         console.log(username, password, firstName, lastName)
-        const response = await axios.post("http://localhost:3000/api/v1/user/signup", { username, password, firstName, lastName })
+        const response = await axios.post("https://paytm-tsu6.onrender.com/api/v1/user/signup", { username, password, firstName, lastName })
         console.log(response)
+        alert("Signup Sucessfull")
         navigate("/signin")
 
     }

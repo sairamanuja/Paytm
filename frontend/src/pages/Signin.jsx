@@ -14,10 +14,12 @@ export const Signin = () => {
     const navigate = useNavigate()
     const handleSignin = async () => {
         console.log(username, password)
-        const response = await axios.post("http://localhost:3000/api/v1/user/login", { username, password })
+        const response = await axios.post("https://paytm-tsu6.onrender.com/api/v1/user/login", { username, password })
         localStorage.setItem("token", response.data.token)
         console.log(response)
-        navigate("/dashboard")
+        alert("Signin Sucessfull")
+
+        navigate("/")
     }
     return <div className="bg-slate-300 h-screen flex justify-center">
     <div className="flex flex-col justify-center">

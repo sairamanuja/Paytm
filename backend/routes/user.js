@@ -123,7 +123,7 @@ userRouter.put("/update", authMiddleware, async (req, res) => {
     }
 });
 
-userRouter.get("/bulk", async (req, res) => {
+userRouter.get("/bulk", authMiddleware, async (req, res) => {
     const filter = req.query.filter || "";
 
     const users = await UserModel.find({
